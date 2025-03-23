@@ -24,9 +24,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>X-Field</title>
+  <title>ZECO</title>
   <!-- <link rel="icon" type="image/x-icon" href="static/images/rontgen.png"> -->
-  <link rel="icon" type="image/x-icon" href="static/images/ic2.png">
+  <link rel="icon" type="image/x-icon" href="static/images/mri.png">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
 
@@ -53,7 +53,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">X-Field: A Physically Grounded Representation for 3D X-ray Reconstruction</h1>
+            <h1 class="title is-1 publication-title">ZECO: ZeroFusion Guided 3D MRI Conditional Generation</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
@@ -68,7 +68,7 @@
               <span class="author-block">
                 <a href="https://medschool.umich.edu/profile/2356/dawen-cai" target="_blank">Dawen Cai</a><sup>2</sup>,</span>
               <span class="author-block">
-                <a href="https://tomyan555.github.io/" target="_blank">Yan Yan</a><sup>3</sup>,</span>
+                <a href="https://tomyan555.github.io/" target="_blank">Yan Yan</a><sup>3, &dagger;</sup>
                     </span>
                   </span>
               </div>
@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="author-note" style="margin-top: 10px; font-size: 16px; text-align: center; color: #555;">
-                  *Equal contribution, &dagger;Corresponding author
+                  &dagger;Corresponding author
                 </div>
                 
 
@@ -145,7 +145,7 @@
 
 
 
-
+<!-- 
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container" style="margin-top: -3rem;">
@@ -157,22 +157,17 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
       <video poster="" id="tree" autoplay controls muted loop>
-        <source src="static/videos/video.mp4" type="video/mp4">
+        <source src="static/videos/visualization_video.mp4" type="video/mp4">
       </video>
-      <h2 class="subtitle has-text-centered">
-        <b>X-Field:</b> Training with sparse inputs, rendering in 360 degrees.<br> 
-        Achieves smooth and detailed textures, outperforming state-of-the-art methods.
-      </h2>
     </div>
   </div>
 </section> -->
-
 
 <!-- Paper abstract -->
 <section class="section hero is-light">
@@ -182,12 +177,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            X-ray imaging is indispensable in medical diagnostics, yet its use is tightly regulated due to potential health risks. To mitigate radiation exposure, recent research focuses on generating novel views from sparse inputs and reconstructing Computed Tomography (CT) volumes, borrowing representations from the 3D reconstruction area.
-            However, these representations originally target visible light imaging that emphasizes reflection and scattering effects, while neglecting penetration and attenuation properties of X-ray imaging.
-            In this paper, we introduce <b>X-Field:</b> , the first 3D representation specifically designed for X-ray imaging, rooted in the energy absorption rates across different materials. 
-            To accurately model diverse materials within internal structures, we employ 3D ellipsoids with distinct attenuation coefficients. To estimate each material's energy absorption of X-rays, we devise an efficient path partitioning algorithm accounting for complex ellipsoid intersections.
-            We further propose hybrid progressive initialization to refine the geometric accuracy of X-Filed and incorporate material-based optimization to enhance model fitting along material boundaries.
-            Experiments show that X-Field achieves superior visual fidelity on both real-world human organ and synthetic object datasets, outperforming state-of-the-art methods in X-ray Novel View Synthesis and CT Reconstruction.
+            Medical image segmentation is crucial for enhancing diagnostic accuracy and treatment planning in Magnetic Resonance Imaging (MRI). However, acquiring precise lesion masks for segmentation model training demands specialized expertise and significant time investment, leading to a small dataset scale in clinical practice. In this paper, we present <b>ZECO</b>, a ZeroFusion guided 3D MRI conditional generation framework that extracts, compresses, and generates high-fidelity MRI images with corresponding 3D segmentation masks to mitigate data scarcity. To effectively capture inter-slice relationships within volumes, we introduce a Spatial Transformation Module that encodes MRI images into a compact latent space for the diffusion process. Moving beyond unconditional generation, our novel ZeroFusion method progressively maps 3D masks to MRI images in latent space, enabling robust training on limited datasets while avoiding overfitting. ZECO outperforms state-of-the-art models in both quantitative and qualitative evaluations on Brain MRI datasets across various modalities, showcasing its exceptional capability in synthesizing high-quality MRI images conditioned on segmentation masks.
           </p>
         </div>
       </div>
@@ -197,16 +187,19 @@
 <!-- End paper abstract -->
 
 
+
+
+
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3 has-text-centered">Pipeline</h2>
-      <img src="static/images/pipeline.png" alt="Overview of X-Field" style="max-width: 70%; height: auto; display: block; margin: 0 auto;"/>
+      <img src="static/images/pipeline.jpg" alt="Overview of ZECO" style="max-width: 70%; height: auto; display: block; margin: 0 auto;"/>
       <div style="max-width: 70%; margin: 0 auto;">
         <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          <span style="color: #F1708E;">(a) Hybrid Progressive Initialization.</span> We begin with X-ray images to construct a coarse initialization using combined iterative methods.  
-          <span style="color: #173047;"><b>(b) Physically Grounded Ellipsoid Representation.</b></span> We transform initialized ellipsoids into NDC space and associate them with pixels, computing the attenuation integral along the ray considering segment length and ellipsoid intersections.  
-          <span style="color: #F4782F;"><b>(c) Material-Based Optimization.</b></span> Our optimization captures detailed materials' boundaries for high-quality rendering.
+          (a) The Spatial Transformation Module encodes MRI images into latent space.
+          (b) The 3D U-Net reconstruct latent images across timesteps in the reverse diffusion process.
+          (c) The ZeroFusion generates Middle-feature and Down-feature conditioned on segmentation masks C for controllable generation.
         </h2>
       </div>
     </div>
@@ -216,119 +209,36 @@
 
 
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
-      <video poster="" id="tree" autoplay controls muted loop 
-        style="width: 80%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
-        <source src="static/videos/foot.mp4" type="video/mp4">
-      </video>
-      <div style="max-width: 100%; margin: 0 auto;">
-        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          Foot Scene
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
-      <video poster="" id="tree" autoplay controls muted loop 
-        style="width: 80%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
-        <source src="static/videos/head.mp4" type="video/mp4">
-      </video>
-      <div style="max-width: 100%; margin: 0 auto;">
-        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          Head Scene
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
-      <video poster="" id="tree" autoplay controls muted loop 
-        style="width: 80%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
-        <source src="static/videos/jaw.mp4" type="video/mp4">
-      </video>
-      <div style="max-width: 100%; margin: 0 auto;">
-        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          Jaw Scene
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
-      <video poster="" id="tree" autoplay controls muted loop 
-        style="width: 80%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
-        <source src="static/videos/teapot.mp4" type="video/mp4">
-      </video>
-      <div style="max-width: 100%; margin: 0 auto;">
-        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          Teapot Scene
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
-      <video poster="" id="tree" autoplay controls muted loop 
-        style="width: 80%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
-        <source src="static/videos/bonsai.mp4" type="video/mp4">
-      </video>
-      <div style="max-width: 100%; margin: 0 auto;">
-        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-          Bonsai Scene
-        </h2>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-<!-- X-ray Novel View Synthesis -->
 <section class="hero is-small">
-  <div class="hero-body" style="max-width: 90%; margin: 0 auto;">
-    <div class="container">
-      <h2 class="title is-3 has-text-centered">X-ray Novel View Synthesis</h2>
-      <img src="static/images/Compare_zoom.png" alt="X-ray Novel View Synthesis" style="max-width: 70%; height: auto; display: block; margin: 0 auto;"/>
-    </div>
-    <div style="max-width: 66%; margin: 0 auto;">
-      <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-        We present visual examples of reconstructed images across four cases trained with 10 views. Our results demonstrate superior visual quality, richer details, and fewer spatial artifacts. Please zoom in for a closer examination.
-      </h2>
+  <div class="container is-max-desktop">
+    <div class="hero-body" style="padding-bottom: 0; overflow: hidden;">
+      <h2 class="title is-3 has-text-centered">Qualitative Result</h2>
+      <video poster="" id="tree" autoplay controls muted loop 
+        style="width: 100%; aspect-ratio: 17 / 8; object-fit: cover; display: block; margin: 0 auto;">
+        <source src="static/videos/compare.mp4" type="video/mp4">
+      </video>
+      <div style="max-width: 100%; margin: 0 auto;">
+        <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
+          ZECO consistently generates accurate and anatomically coherent slices in both Flair and T1 MRI modalities.
+        </h2>
+      </div>
     </div>
   </div>
 </section>
+
+
+
 
 <!-- CT Reconstruction -->
 <section class="hero is-small">
   <div class="hero-body" style="max-width: 80%; margin: 0 auto;">
     <div class="container">
-      <h2 class="title is-3 has-text-centered">CT Reconstruction</h2>
-      <img src="static/images/ctresult.png" alt="CT Reconstruction" style="max-width: 73%; height: auto; display: block; margin: 0 auto;"/>
+      <h2 class="title is-3 has-text-centered">Quantitative Result</h2>
+      <img src="static/images/table.jpg" alt="CT Reconstruction" style="max-width: 73%; height: auto; display: block; margin: 0 auto;"/>
     </div>
     <div style="max-width: 72%; margin: 0 auto;">
       <h2 class="subtitle has-text-centered" style="font-size: 16px; line-height: 1.3;">
-        Our method produces clearer textures, more refined anatomical structures, and fewer artifacts, particularly in high-contrast regions such as the cranial cavity. Please zoom in for a closer examination.
+        ZECO achieves substantial improvements across all evaluation metrics consistently across experimental settings.
       </h2>
     </div>
   </div>
@@ -345,15 +255,7 @@
     <div class="container is-max-desktop content">
         <h2 class="title">BibTeX</h2>
         <pre><code>
-@misc{wang2025xfieldphysicallygroundedrepresentation,
-  title={X-Field: A Physically Grounded Representation for 3D X-ray Reconstruction}, 
-  author={Feiran Wang and Jiachen Tao and Junyi Wu and Haoxuan Wang and Bin Duan and Kai Wang and Zongxin Yang and Yan Yan},
-  year={2025},
-  eprint={2503.08596},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2503.08596}
-}
+
         </code></pre>
     </div>
 </section>
